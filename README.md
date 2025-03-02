@@ -13,7 +13,6 @@ This application helps venue staff manage events, sell tickets, and verify atten
 - **Event Management**: Create, update, delete, and list upcoming events
 - **Ticket Sales**: Purchase tickets through Stripe integration
 - **QR Code Ticketing**: Generate QR codes for tickets and scan for entry validation
-- **User Management**: Admin interface for managing user roles and permissions
 
 ## Tech Stack
 
@@ -100,8 +99,8 @@ This application is configured for deployment on Netlify:
 - [x] Project initialization with Next.js 15
 - [x] TailwindCSS and ShadCN/UI setup with dark theme
 - [x] Custom blood-red script font for the “Red Jacks” logo
-- [ ] Clerk setup for user sign-up, login, and session
-- [ ] Role-based access control
+- [X] Clerk setup for user sign-up, login, and session
+- [X] Role-based access control
 - [ ] Drizzle ORM with Supabase database
 - [ ] Supabase storage for event images and other media
 - [ ] Stripe configuration for product and price data

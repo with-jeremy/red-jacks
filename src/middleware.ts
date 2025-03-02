@@ -1,30 +1,21 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const { userId, sessionId, getToken } = getAuth(request);
+const isAdminRoute = createRouteMatcher(['/admin(.*)'])
 
-  if (!userId) {
-    return NextResponse.redirect('/login');
+export default clerkMiddleware(async (auth, req) => {
+  // Protect all routes starting with `/admin`
+  if (isAdminRoute(req) && (await auth()).sessionClaims?.metadata?.role !== 'admin') {
+    const url = new URL('/', req.url)
+    return NextResponse.redirect(url)
   }
-
-  // Add role-based access control logic here
-  // For example, restrict access to admin pages
-  const url = request.nextUrl.clone();
-  if (url.pathname.startsWith('/admin') && !isAdmin(userId)) {
-    return NextResponse.redirect('/');
-  }
-
-  return NextResponse.next();
-}
-
-function isAdmin(userId: string): boolean {
-  // Implement your logic to check if the user is an admin
-  // This is a placeholder function
-  return userId === 'admin-user-id';
-}
+})
 
 export const config = {
-  matcher: ['/admin/:path*'],
-};
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
+}

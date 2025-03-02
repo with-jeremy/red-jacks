@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Abel, Dancing_Script } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import "./globals.css";
 
 const abel = Abel({
@@ -30,6 +30,15 @@ export default function RootLayout({
         <body
           className={`${abel.variable} ${dancingScript.variable} antialiased bg-background text-foreground`}
         >
+          <header>
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
           {children}
         </body>
       </html>
